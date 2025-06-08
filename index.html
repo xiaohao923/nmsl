@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>xiaohao的個人網站 - 首頁</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="1920A1D0-7F36-41F0-BCA7-88605FC45C2B.png" />
+  <style>
+    body {
+      font-family: "Noto Sans TC", sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    nav {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    nav a {
+      margin: 0 15px;
+      color: #7289da;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    .discord-link {
+      display: inline-block;
+      background-color: #7289da;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      margin: 5px;
+    }
+    .discord-link:hover {
+      background-color: #5b6eae;
+    }
+    section {
+      background-color: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .views {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">首頁</a>
+  </nav>
+
+  <header>
+    <h1>Xiaohao</h1>
+    <a href="https://discord.gg/zeroxiaohao-no1" target="_blank" class="discord-link">加入我的 Discord 群組</a>
+    <a href="https://www.instagram.com/xiaohao_923/" target="_blank" class="discord-link">follow IG</a>
+  </header>
+
+  <section>
+    <h2>Hi!</h2>
+    <p>正在為未來的我留下值得紀錄的事</p>
+    <p>有事可以加入我的 DC 群找我，沒事就不要吵</p>
+    <p>想認識可以追蹤我的哀居也可以加入dc💗<p>
+    <p>weplay資訊有在更新了啦</p>
+    <p>3y愛吃棒棒糖🍭</p>
+    <p>這邊還在持續更新中</p>
+    <img src="1920A1D0-7F36-41F0-BCA7-88605FC45C2B.png" 
+       alt="Discord 圖片" 
+       style="max-width: 100%; height: auto; margin-top: 20px;">
+  </section>
+
+  <div class="views">
+    👀 目前瀏覽次數：<span id="viewCount">載入中...</span>
+  </div>
+
+  <script>
+    (async () => {
+      const binId = '6831d0a38561e97a501aed41';
+      const apiKey = '$2a$10$rUTs2dmXhZK3L31uvEbzH.dh9A2kIdYTwfQF3JG/LejqcXbfttTlK';
+      const url = `https://api.jsonbin.io/v3/b/${binId}`;
+      const viewElement = document.getElementById('viewCount');
+
+      try {
+        // 讀取目前的瀏覽數
+        const getRes = await fetch(url + '/latest', {
+          headers: { 'X-Master-Key': apiKey }
+        });
+        const data = await getRes.json();
+        const currentViews = data.record.views || 0;
+
+        // 增加並顯示
+        const newViews = currentViews + 1;
+        viewElement.textContent = newViews;
+
+        // 回寫更新瀏覽數
+        await fetch(url, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': apiKey
+          },
+          body: JSON.stringify({ views: newViews })
+        });
+      } catch (error) {
+        console.error('讀取失敗', error);
+        viewElement.textContent = '載入失敗';
+      }
+    })();
+  </script>
+</body>
+</html>
