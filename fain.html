@@ -6,152 +6,173 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="1920A1D0-7F36-41F0-BCA7-88605FC45C2B.png" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 20px;
       background-color: #0a0a0a;
       color: #e0e0e0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
-
     .back-button {
       position: fixed;
       top: 20px;
       right: 20px;
-      padding: 10px 20px;
-      font-weight: bold;
+      padding: 10px 22px;
+      font-weight: 700;
       font-size: 14px;
       color: #00ffe1;
       background: rgba(15, 15, 15, 0.4);
-      border: 1px solid #00ffe1;
+      border: 1.5px solid #00ffe1;
       border-radius: 12px;
       text-decoration: none;
-      z-index: 999;
+      z-index: 9999;
       backdrop-filter: blur(6px);
       box-shadow: 0 0 15px rgba(0, 255, 225, 0.3);
-      transition: all 0.3s ease, transform 0.2s ease;
+      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      user-select: none;
     }
-
-    .back-button:hover {
+    .back-button:hover,
+    .back-button:focus {
       background: rgba(0, 255, 225, 0.1);
       box-shadow: 0 0 25px #00ffe1, 0 0 40px rgba(0, 255, 225, 0.4);
       transform: scale(1.05);
+      outline: none;
     }
-
     #searchInput {
       display: block;
-      margin: 80px auto 20px;
-      padding: 12px;
+      margin: 80px auto 20px auto;
+      padding: 12px 16px;
       width: 80%;
       max-width: 400px;
       border: none;
       border-radius: 8px;
       font-size: 16px;
       background: #1e1e1e;
-      color: white;
+      color: #fff;
       box-shadow: 0 0 10px rgba(0, 255, 225, 0.3);
+      transition: box-shadow 0.3s ease;
     }
-
+    #searchInput:focus {
+      box-shadow: 0 0 18px #00ffe1;
+      outline: none;
+    }
     .gallery {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       max-width: 1200px;
       margin: 0 auto;
+      gap: 20px;
     }
-
     .image-item {
       flex: 1 1 300px;
-      margin: 15px;
-      text-align: center;
-      cursor: pointer;
+      max-width: 320px;
       background-color: #111;
       border-radius: 10px;
       overflow: hidden;
-      transition: transform 0.3s ease;
+      cursor: pointer;
       box-shadow: 0 0 10px rgba(0, 255, 225, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
     }
-
-    .image-item:hover {
-      transform: scale(1.03);
+    .image-item:hover,
+    .image-item:focus-within {
+      transform: scale(1.05);
       box-shadow: 0 0 25px rgba(0, 255, 225, 0.4);
+      outline: none;
     }
-
     .image-item img {
       width: 100%;
-      height: auto;
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 1px solid #00ffe1;
       display: block;
+      user-select: none;
+      border-radius: 10px 10px 0 0;
     }
-
     .caption {
+      padding: 12px 16px;
       font-size: 14px;
-      padding: 10px;
       color: #ccc;
+      flex-grow: 1;
+      user-select: text;
     }
-
     #noResults {
       display: none;
       text-align: center;
-      margin-top: 30px;
+      margin-top: 40px;
       font-size: 18px;
-      color: #aaa;
+      color: #777;
+      font-weight: 600;
     }
-
     #imageModal {
       display: none;
       position: fixed;
-      z-index: 1000;
-      padding-top: 60px;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
+      z-index: 10000;
+      inset: 0;
       background-color: rgba(0, 0, 0, 0.9);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 60px 20px 40px;
+      text-align: center;
     }
-
     #modalContent {
-      margin: auto;
-      display: block;
       max-width: 90%;
-      max-height: 70%;
+      max-height: 70vh;
       border-radius: 12px;
       box-shadow: 0 0 25px #00ffe1;
+      user-select: none;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
     }
-
     #modalCaption {
-      margin: 20px auto;
-      text-align: center;
-      color: white;
+      color: #fff;
       font-size: 18px;
       max-width: 90%;
+      margin: 0 auto 10px auto;
+      user-select: text;
     }
-
     #modalClose {
       position: absolute;
       top: 20px;
-      right: 35px;
-      color: white;
+      right: 30px;
       font-size: 40px;
-      font-weight: bold;
+      font-weight: 700;
+      color: #fff;
       cursor: pointer;
+      user-select: none;
+      transition: color 0.3s ease;
+      padding: 0 8px;
+      line-height: 1;
     }
-
+    #modalClose:hover,
+    #modalClose:focus {
+      color: #00ffe1;
+      outline: none;
+    }
     .floating-xiaohao {
       position: fixed;
       bottom: 30px;
       left: 50%;
       transform: translateX(-50%);
       background-color: rgba(0, 0, 0, 0.6);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-weight: bold;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 24px;
+      font-weight: 700;
       font-size: 16px;
-      z-index: 999;
+      z-index: 9999;
       animation: float 2s ease-in-out infinite;
+      user-select: none;
+      box-shadow: 0 0 10px #00ffe1;
+      text-shadow: 0 0 5px #00ffe1;
     }
-
     @keyframes float {
       0%, 100% {
         transform: translateX(-50%) translateY(0);
@@ -160,95 +181,129 @@
         transform: translateX(-50%) translateY(-6px);
       }
     }
-
     @media (max-width: 768px) {
       .image-item {
         flex: 1 1 90%;
+        max-width: 90%;
+      }
+      .image-item img {
+        height: 150px;
+      }
+      #modalContent {
+        max-height: 50vh;
       }
     }
   </style>
 </head>
 <body>
-  <a class="back-button" href="index.html">⮐ 回主頁</a>
+  <a class="back-button" href="index.html" aria-label="回主頁">⮐ 回主頁</a>
 
-  <input type="text" id="searchInput" placeholder="輸入關鍵字搜尋...">
+  <input
+    type="search"
+    id="searchInput"
+    placeholder="輸入關鍵字搜尋..."
+    aria-label="搜尋圖片與描述"
+    autocomplete="off"
+  />
 
-  <div class="gallery" id="gallery">
-    <!-- 每一張圖片與描述 -->
-    <div class="image-item" data-caption="族長：七仔（十大槍擊要犯）更新時間：6/01 13:57">
+  <main class="gallery" id="gallery" role="list">
+    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：七仔（十大槍擊要犯）更新時間：6/01 13:57">
       <img src="IMG_4905.jpg" alt="七仔" />
       <div class="caption">族長：七仔（十大槍擊要犯）更新時間：6/01 13:57</div>
-    </div>
-    <div class="image-item" data-caption="族長：書值（PUA帝國）更新時間：5/31 15:09">
+    </article>
+    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：書值（PUA帝國）更新時間：5/31 15:09">
       <img src="IMG_4877.jpg" alt="書值" />
       <div class="caption">族長：書值（PUA帝國）更新時間：5/31 15:09</div>
-    </div>
-    <div class="image-item" data-caption="族長：家族招生（水仙宮）更新時間：5/4 17:36">
+    </article>
+    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：家族招生（水仙宮）更新時間：5/4 17:36">
       <img src="IMG_4074.jpeg" alt="水仙宮" />
       <div class="caption">族長：家族招生（水仙宮）更新時間：5/4 17:36</div>
-    </div>
-    <div class="image-item" data-caption="族長：鱷勢力（lmclub）更新時間：6/4 20:50">
+    </article>
+    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：鱷勢力（lmclub）更新時間：6/4 20:50">
       <img src="IMG_4969.jpg" alt="鱷勢力" />
       <div class="caption">族長：鱷勢力（lmclub）更新時間：6/4 20:50</div>
-    </div>
-    <div class="image-item" data-caption="族長：未知（刁蟲小姬）更新時間：6/5 00:33">
+    </article>
+    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：未知（刁蟲小姬）更新時間：6/5 00:33">
       <img src="IMG_4973.jpg" alt="刁蟲小姬" />
       <div class="caption">族長：未知（刁蟲小姬）更新時間：6/5 00:33</div>
-    </div>
-    <div class="image-item" data-caption="族長：恩椎（問心無愧）更新時間：6/8 00:33">
-      <img src="IMG_5027.jpg" alt="恩椎" />
-      <div class="caption">族長：恩椎（問心無愧）更新時間：6/8 00:33</div>
-    </div>
-    <div class="image-item" data-caption="族長：未知（夏日梧桐雨）更新時間：6/8 20:40">
-      <img src="IMG_5062.jpeg" alt="夏日梧桐雨" />
-      <div class="caption">族長：未知（夏日梧桐雨）更新時間：6/8 20:40</div>
-    </div>
-  </div>
+    </article>
+    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：鱷勢力（lmclub）更新時間：6/3 22:26">
+      <img src="IMG_4937.jpg" alt="鱷勢力" />
+      <div class="caption">族長：鱷勢力（lmclub）更新時間：6/3 22:26</div>
+    </article>
+  </main>
 
-  <div id="noResults">沒有找到你想要的內容，可以加入賴群一起討論</div>
+  <div id="noResults">沒有符合條件的結果。</div>
 
-  <div id="imageModal">
-    <span id="modalClose">&times;</span>
-    <img id="modalContent" />
+  <div id="imageModal" role="dialog" aria-modal="true" aria-labelledby="modalCaption" tabindex="-1">
+    <span id="modalClose" role="button" aria-label="關閉放大圖片">&times;</span>
+    <img id="modalContent" src="" alt="" />
     <div id="modalCaption"></div>
   </div>
 
-  <div class="floating-xiaohao">需要特定家族可聯絡</div>
+  <div class="floating-xiaohao">2023</div>
 
   <script>
-    const searchInput = document.getElementById("searchInput");
-    const imageItems = document.querySelectorAll(".image-item");
-    const noResults = document.getElementById("noResults");
-    const modal = document.getElementById("imageModal");
-    const modalImg = document.getElementById("modalContent");
-    const modalCaption = document.getElementById("modalCaption");
-    const modalClose = document.getElementById("modalClose");
+    // 簡易圖片放大功能
+    const gallery = document.getElementById('gallery');
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalContent');
+    const modalCaption = document.getElementById('modalCaption');
+    const modalClose = document.getElementById('modalClose');
 
-    // 搜尋功能
-    searchInput.addEventListener("input", function () {
-      const keyword = this.value.toLowerCase();
-      let found = false;
-      imageItems.forEach(item => {
-        const text = item.dataset.caption.toLowerCase();
-        const match = text.includes(keyword);
-        item.style.display = match ? "block" : "none";
-        if (match) found = true;
-      });
-      noResults.style.display = found ? "none" : "block";
+    gallery.addEventListener('click', e => {
+      const target = e.target.closest('.image-item');
+      if (!target) return;
+      const img = target.querySelector('img');
+      const caption = target.dataset.caption || '';
+      modalImg.src = img.src;
+      modalImg.alt = img.alt;
+      modalCaption.textContent = caption;
+      modal.style.display = 'block';
+      modal.focus();
     });
 
-    // 圖片點擊放大
-    imageItems.forEach(item => {
-      item.addEventListener("click", () => {
-        const img = item.querySelector("img");
-        modalImg.src = img.src;
-        modalCaption.textContent = item.dataset.caption;
-        modal.style.display = "block";
-      });
+    modalClose.addEventListener('click', () => {
+      modal.style.display = 'none';
+      modalImg.src = '';
+      modalImg.alt = '';
     });
 
-    modalClose.onclick = () => modal.style.display = "none";
-    window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
+    modal.addEventListener('click', e => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        modalImg.src = '';
+        modalImg.alt = '';
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modal.style.display === 'block') {
+        modal.style.display = 'none';
+        modalImg.src = '';
+        modalImg.alt = '';
+      }
+    });
+
+    // 搜尋過濾功能
+    const searchInput = document.getElementById('searchInput');
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.trim().toLowerCase();
+      const items = document.querySelectorAll('.image-item');
+      let visibleCount = 0;
+      items.forEach(item => {
+        const caption = item.dataset.caption.toLowerCase();
+        if (caption.includes(query)) {
+          item.style.display = '';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+    });
   </script>
 </body>
 </html>
