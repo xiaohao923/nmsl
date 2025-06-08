@@ -4,88 +4,81 @@
     <meta charset="UTF-8">
     <title>資金防護罩</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="favicon.png" type="image/png">
-    <link href="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/css/lightbox.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="1920A1D0-7F36-41F0-BCA7-88605FC45C2B.png" />
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f9f9f9;
         }
 
         .back-button {
             position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            padding: 10px 18px;
-            border-radius: 25px;
+            top: 10px;
+            left: 10px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
             text-decoration: none;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            border-radius: 5px;
+            z-index: 999;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
 
-        .back-button::before {
-            content: "\2190 ";
-        }
-
-        .back-button:hover {
-            background-color: rgba(0, 0, 0, 0.9);
-        }
-
-        .search-container {
-            max-width: 600px;
-            margin: 80px auto 20px;
-            text-align: center;
-        }
-
-        .search-input {
-            width: 100%;
+        #searchInput {
+            display: block;
+            margin: 60px auto 20px;
             padding: 10px;
-            font-size: 16px;
-            border-radius: 6px;
+            width: 80%;
+            max-width: 400px;
             border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
         }
 
         .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
             max-width: 1200px;
-            margin: 0 auto 40px;
-            padding: 0 10px;
+            margin: 20px auto;
         }
 
         .image-item {
-            background-color: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
-        }
-
-        .image-item:hover {
-            transform: translateY(-3px);
+            flex: 1 1 calc(33.33% - 20px);
+            margin: 10px;
+            box-sizing: border-box;
+            text-align: center;
+            cursor: pointer;
         }
 
         .image-item img {
             width: 100%;
             height: auto;
-            display: block;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+
+        .image-item:hover img {
+            transform: scale(1.03);
         }
 
         .caption {
             font-size: 14px;
-            padding: 10px;
-            color: #333;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .image-item {
+                flex: 1 1 100%;
+            }
         }
 
         .floating-xiaohao {
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             background-color: rgba(0, 0, 0, 0.6);
@@ -102,49 +95,135 @@
             0%, 100% { transform: translateX(-50%) translateY(0); }
             50% { transform: translateX(-50%) translateY(-5px); }
         }
+
+        #imageModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            padding-top: 60px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.85);
+        }
+
+        #modalContent {
+            margin: auto;
+            display: block;
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        #modalCaption {
+            margin: 20px auto;
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            max-width: 80%;
+        }
+
+        #modalClose {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <a class="back-button" href="index.html">回到主頁</a>
+    <a class="back-button" href="index.html">← 回到主頁</a>
 
-    <div class="search-container">
-        <input type="text" class="search-input" id="search" placeholder="輸入關鍵字搜尋族長或資訊...">
+    <input type="text" id="searchInput" placeholder="輸入關鍵字搜尋...">
+
+    <div class="gallery">
+        <div class="image-item" data-caption="族長：七仔（十大槍擊要犯）更新時間：6/01 13:57">
+            <div class="caption">族長：七仔（十大槍擊要犯）更新時間：6/01 13:57</div>
+            <img src="IMG_4905.jpg" alt="七仔">
+        </div>
+        <div class="image-item" data-caption="族長：書值（PUA帝國）更新時間：5/31 15:09">
+            <div class="caption">族長：書值（PUA帝國）更新時間：5/31 15:09</div>
+            <img src="IMG_4877.jpg" alt="書值">
+        </div>
+        <div class="image-item" data-caption="族長：家族招生（水仙宮）更新時間：5/4 17:36">
+            <div class="caption">族長：家族招生（水仙宮）更新時間：5/4 17:36</div>
+            <img src="IMG_4074.jpeg" alt="水仙宮">
+        </div>
+        <div class="image-item" data-caption="族長：鱷勢力（lmclub）更新時間：6/4 20:50">
+            <div class="caption">族長：鱷勢力（lmclub）更新時間：6/4 20:50</div>
+            <img src="IMG_4969.jpg" alt="鱷勢力">
+        </div>
+        <div class="image-item" data-caption="族長：未知（刁蟲小姬）更新時間：6/5 00:33">
+            <div class="caption">族長：未知（刁蟲小姬）更新時間：6/5 00:33</div>
+            <img src="IMG_4973.jpg" alt="刁蟲小姬">
+        </div>
+        <div class="image-item" data-caption="族長：恩椎（問心無愧）更新時間：6/8 00:33">
+            <div class="caption">族長：恩椎（問心無愧）更新時間：6/8 00:33</div>
+            <img src="IMG_5027.jpg" alt="恩椎">
+        </div>
+        <div class="image-item" data-caption="族長：未知（夏日梧桐雨）更新時間：6/8 20:40">
+            <div class="caption">族長：未知（夏日梧桐雨）更新時間：6/8 20:40</div>
+            <img src="IMG_5062.jpeg" alt="夏日梧桐雨">
+        </div>
     </div>
 
-    <div class="gallery" id="gallery">
-        <div class="image-item" data-caption="七仔 十大槍擊要犯">
-            <a href="IMG_4905.jpg" data-lightbox="gallery" data-title="族長：七仔（十大槍擊要犯）更新時間：6/01 13:57">
-                <img src="IMG_4905.jpg" alt="七仔">
-            </a>
-            <div class="caption">族長：七仔（十大槍擊要犯）更新時間：6/01 13:57</div>
-        </div>
-        <div class="image-item" data-caption="書值 PUA帝國">
-            <a href="IMG_4877.jpg" data-lightbox="gallery" data-title="族長：書值（PUA帝國）更新時間：5/31 15:09">
-                <img src="IMG_4877.jpg" alt="書值">
-            </a>
-            <div class="caption">族長：書值（PUA帝國）更新時間：5/31 15:09</div>
-        </div>
-        <div class="image-item" data-caption="家族招生 水仙宮">
-            <a href="IMG_4074.jpeg" data-lightbox="gallery" data-title="族長：家族招生（水仙宮）更新時間：5/4 17:36">
-                <img src="IMG_4074.jpeg" alt="水仙宮">
-            </a>
-            <div class="caption">族長：家族招生（水仙宮）更新時間：5/4 17:36</div>
-        </div>
-        <!-- 其他圖片以相同格式加上 data-caption 與 lightbox -->
+    <div id="noResults" style="display: none; text-align: center; margin-top: 30px; font-size: 18px; color: #777;">
+        沒有找到你想要的內容，可以加入賴群一起討論
+    </div>
+
+    <div id="imageModal">
+        <span id="modalClose">&times;</span>
+        <img id="modalContent">
+        <div id="modalCaption"></div>
     </div>
 
     <div class="floating-xiaohao">需要特定家族可聯絡</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox.min.js"></script>
     <script>
-        document.getElementById("search").addEventListener("input", function () {
+        // 搜尋功能
+        document.getElementById("searchInput").addEventListener("input", function () {
             const keyword = this.value.toLowerCase();
             const items = document.querySelectorAll(".image-item");
+            let found = false;
+
             items.forEach(item => {
-                const caption = item.getAttribute("data-caption").toLowerCase();
-                item.style.display = caption.includes(keyword) ? "block" : "none";
+                const caption = item.dataset.caption.toLowerCase();
+                const match = caption.includes(keyword);
+                item.style.display = match ? "block" : "none";
+                if (match) found = true;
+            });
+
+            document.getElementById("noResults").style.display = found ? "none" : "block";
+        });
+
+        // 放大圖功能
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalContent");
+        const modalCaption = document.getElementById("modalCaption");
+        const closeBtn = document.getElementById("modalClose");
+
+        document.querySelectorAll(".image-item").forEach(item => {
+            item.addEventListener("click", () => {
+                const img = item.querySelector("img");
+                modalImg.src = img.src;
+                modalCaption.textContent = item.dataset.caption;
+                modal.style.display = "block";
             });
         });
+
+        closeBtn.onclick = () => {
+            modal.style.display = "none";
+        };
+
+        window.onclick = event => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
     </script>
 </body>
 </html>
