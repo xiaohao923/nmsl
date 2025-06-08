@@ -90,11 +90,12 @@
     .image-item img {
       width: 100%;
       height: 200px;
-      object-fit: cover;
+      object-fit: contain; /* 由 cover 改成 contain */
       border-bottom: 1px solid #00ffe1;
       display: block;
       user-select: none;
       border-radius: 10px 10px 0 0;
+      background-color: #111; /* 加背景，避免空白 */
     }
     .caption {
       padding: 12px 16px;
@@ -123,13 +124,16 @@
       text-align: center;
     }
     #modalContent {
-      max-width: 90%;
-      max-height: 70vh;
+      max-width: 90vw;
+      max-height: 80vh;
+      width: auto;
+      height: auto;
       border-radius: 12px;
       box-shadow: 0 0 25px #00ffe1;
       user-select: none;
       margin-bottom: 20px;
       transition: transform 0.3s ease;
+      object-fit: contain;
     }
     #modalCaption {
       color: #fff;
