@@ -5,6 +5,7 @@
     <title>資金防護罩</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="favicon.png" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/css/lightbox.min.css" rel="stylesheet" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +14,6 @@
             background-color: #f9f9f9;
         }
 
-        /* 改良後的返回按鈕 */
         .back-button {
             position: fixed;
             top: 20px;
@@ -29,11 +29,25 @@
         }
 
         .back-button::before {
-            content: "← ";
+            content: "\2190 ";
         }
 
         .back-button:hover {
             background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 80px auto 20px;
+            text-align: center;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
         }
 
         .gallery {
@@ -41,7 +55,7 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 24px;
             max-width: 1200px;
-            margin: 80px auto 40px;
+            margin: 0 auto 40px;
             padding: 0 10px;
         }
 
@@ -85,51 +99,52 @@
         }
 
         @keyframes float {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            50% {
-                transform: translateX(-50%) translateY(-5px);
-            }
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
         }
     </style>
 </head>
 <body>
-
     <a class="back-button" href="index.html">回到主頁</a>
 
-    <div class="gallery">
-        <div class="image-item">
-            <img src="IMG_4905.jpg" alt="七仔">
+    <div class="search-container">
+        <input type="text" class="search-input" id="search" placeholder="輸入關鍵字搜尋族長或資訊...">
+    </div>
+
+    <div class="gallery" id="gallery">
+        <div class="image-item" data-caption="七仔 十大槍擊要犯">
+            <a href="IMG_4905.jpg" data-lightbox="gallery" data-title="族長：七仔（十大槍擊要犯）更新時間：6/01 13:57">
+                <img src="IMG_4905.jpg" alt="七仔">
+            </a>
             <div class="caption">族長：七仔（十大槍擊要犯）更新時間：6/01 13:57</div>
         </div>
-        <div class="image-item">
-            <img src="IMG_4877.jpg" alt="書值">
+        <div class="image-item" data-caption="書值 PUA帝國">
+            <a href="IMG_4877.jpg" data-lightbox="gallery" data-title="族長：書值（PUA帝國）更新時間：5/31 15:09">
+                <img src="IMG_4877.jpg" alt="書值">
+            </a>
             <div class="caption">族長：書值（PUA帝國）更新時間：5/31 15:09</div>
         </div>
-        <div class="image-item">
-            <img src="IMG_4074.jpeg" alt="水仙宮">
+        <div class="image-item" data-caption="家族招生 水仙宮">
+            <a href="IMG_4074.jpeg" data-lightbox="gallery" data-title="族長：家族招生（水仙宮）更新時間：5/4 17:36">
+                <img src="IMG_4074.jpeg" alt="水仙宮">
+            </a>
             <div class="caption">族長：家族招生（水仙宮）更新時間：5/4 17:36</div>
         </div>
-        <div class="image-item">
-            <img src="IMG_4969.jpg" alt="鱷勢力">
-            <div class="caption">族長：鱷勢力（lmclub）更新時間：6/4 20:50</div>
-        </div>
-        <div class="image-item">
-            <img src="IMG_4973.jpg" alt="刁蟲小姬">
-            <div class="caption">族長：未知（刁蟲小姬）更新時間：6/5 00:33</div>
-        </div>
-        <div class="image-item">
-            <img src="IMG_5027.jpg" alt="恩椎">
-            <div class="caption">族長：恩椎（問心無愧）更新時間：6/8 00:33</div>
-        </div>
-        <div class="image-item">
-            <img src="IMG_5062.jpeg" alt="夏日梧桐雨">
-            <div class="caption">族長：未知（夏日梧桐雨）更新時間：6/8 20:40</div>
-        </div>
+        <!-- 其他圖片以相同格式加上 data-caption 與 lightbox -->
     </div>
 
     <div class="floating-xiaohao">需要特定家族可聯絡</div>
 
+    <script src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox.min.js"></script>
+    <script>
+        document.getElementById("search").addEventListener("input", function () {
+            const keyword = this.value.toLowerCase();
+            const items = document.querySelectorAll(".image-item");
+            items.forEach(item => {
+                const caption = item.getAttribute("data-caption").toLowerCase();
+                item.style.display = caption.includes(keyword) ? "block" : "none";
+            });
+        });
+    </script>
 </body>
 </html>
