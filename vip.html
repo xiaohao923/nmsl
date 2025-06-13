@@ -20,6 +20,13 @@
       font-size: 2.5rem;
       margin-top: 4rem;
     }
+    .notice {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #ffcc00;
+      margin-top: -1rem;
+      text-shadow: 0 0 5px #ffaa00;
+    }
     .pricing-container {
       display: flex;
       justify-content: center;
@@ -72,7 +79,6 @@
     .button:hover {
       background: #00c0dd;
     }
-
     .back-home {
       position: fixed;
       top: 20px;
@@ -87,7 +93,6 @@
       transition: background 0.3s;
       z-index: 1000;
     }
-
     .back-home:hover {
       background-color: #00c0dd;
     }
@@ -98,7 +103,11 @@
   <!-- 回到主頁按鈕 -->
   <a class="back-home" href="/index.html">← 回到主頁</a>
 
+  <!-- 標題與說明 -->
   <h1>VIP 會員方案</h1>
+  <p class="notice">若需要購買請至 <strong>LINE</strong> 留下要購買的方案名稱 🧾</p>
+
+  <!-- VIP 卡片列表 -->
   <div class="pricing-container">
     <div class="card">
       <div class="card-title">初級會員｜打聽打聽我是誰</div>
@@ -133,5 +142,6 @@
       <a class="button" href="https://lin.ee/Xo5TkF8" target="_blank">加入終極會員</a>
     </div>
   </div>
+
 </body>
 </html>
