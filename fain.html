@@ -6,272 +6,155 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="1920A1D0-7F36-41F0-BCA7-88605FC45C2B.png" />
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #0a0a0a;
-      color: #e0e0e0;
+      margin: 0; padding: 20px;
+      background-color: #0a0a0a; color: #e0e0e0;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+    }
+    body.light {
+      background-color: #f5f5f5; color: #333;
     }
     .back-button {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 10px 22px;
-      font-weight: 700;
-      font-size: 14px;
-      color: #00ffe1;
-      background: rgba(15, 15, 15, 0.4);
-      border: 1.5px solid #00ffe1;
-      border-radius: 12px;
-      text-decoration: none;
-      z-index: 9999;
+      position: fixed; top: 20px; right: 20px;
+      padding: 10px 22px; font-weight: 700; font-size: 14px;
+      color: #00ffe1; background: rgba(15,15,15,0.4);
+      border: 1.5px solid #00ffe1; border-radius: 12px;
+      text-decoration: none; z-index: 9999;
       backdrop-filter: blur(6px);
-      box-shadow: 0 0 15px rgba(0, 255, 225, 0.3);
-      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 0 15px rgba(0,255,225,0.3);
+      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
       user-select: none;
     }
-    .back-button:hover,
-    .back-button:focus {
-      background: rgba(0, 255, 225, 0.1);
-      box-shadow: 0 0 25px #00ffe1, 0 0 40px rgba(0, 255, 225, 0.4);
-      transform: scale(1.05);
-      outline: none;
+    body.light .back-button {
+      color: #007bff; background: rgba(255,255,255,0.8); border-color: #007bff;
+      box-shadow: none;
+    }
+    #themeSwitch {
+      position: fixed; top: 20px; left: 20px;
+      padding: 8px 12px; font-size: 14px;
+      border: none; border-radius: 8px;
+      cursor: pointer; z-index: 9999;
+      background: rgba(15,15,15,0.4); color: #00ffe1;
+    }
+    body.light #themeSwitch {
+      background: rgba(255,255,255,0.8); color: #007bff;
     }
     #searchInput {
-      display: block;
-      margin: 80px auto 20px auto;
-      padding: 12px 16px;
-      width: 80%;
-      max-width: 400px;
-      border: none;
-      border-radius: 8px;
+      display: block; margin: 80px auto 20px;
+      padding: 12px 16px; width: 80%; max-width: 400px;
+      border: none; border-radius: 8px;
       font-size: 16px;
-      background: #1e1e1e;
-      color: #fff;
-      box-shadow: 0 0 10px rgba(0, 255, 225, 0.3);
-      transition: box-shadow 0.3s ease;
+      background: var(--input-bg, #1e1e1e);
+      color: var(--input-color, #fff);
+      box-shadow: 0 0 10px rgba(0,255,225,0.3);
+      transition: box-shadow 0.3s;
+    }
+    body.light #searchInput {
+      --input-bg: #fff; --input-color: #000;
+      box-shadow: none;
     }
     #searchInput:focus {
-      box-shadow: 0 0 18px #00ffe1;
-      outline: none;
+      box-shadow: 0 0 18px #00ffe1; outline: none;
     }
     .gallery {
-      display: flex;
-      flex-wrap: wrap;
+      display: flex; flex-wrap: wrap;
       justify-content: center;
-      max-width: 1200px;
-      margin: 0 auto;
-      gap: 20px;
+      max-width: 1200px; margin: 0 auto; gap: 20px;
     }
     .image-item {
-      flex: 1 1 300px;
-      max-width: 320px;
-      background-color: #111;
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(0, 255, 225, 0.15);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      display: flex;
-      flex-direction: column;
+      flex: 1 1 300px; max-width: 320px;
+      background-color: #111; border-radius: 10px;
+      overflow: hidden; cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,255,225,0.15);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex; flex-direction: column;
     }
-    .image-item:hover,
-    .image-item:focus-within {
+    body.light .image-item { background: #fff; }
+    .image-item:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(0, 255, 225, 0.4);
-      outline: none;
+      box-shadow: 0 0 25px rgba(0,255,225,0.4);
     }
     .image-item img {
-      width: 100%;
-      height: 200px;
-      object-fit: contain; /* 由 cover 改成 contain */
+      width: 100%; height: 200px;
+      object-fit: contain;
       border-bottom: 1px solid #00ffe1;
-      display: block;
-      user-select: none;
-      border-radius: 10px 10px 0 0;
-      background-color: #111; /* 加背景，避免空白 */
+      display: block; user-select: none;
+      background-color: #111;
     }
-    .caption {
-      padding: 12px 16px;
-      font-size: 14px;
-      color: #ccc;
-      flex-grow: 1;
-      user-select: text;
+    .image-item .caption {
+      padding: 12px 16px; font-size: 14px;
+      color: #ccc; flex-grow: 1; user-select: text;
     }
+    body.light .image-item .caption { color: #555; }
     #noResults {
-      display: none;
-      text-align: center;
-      margin-top: 40px;
-      font-size: 18px;
-      color: #777;
-      font-weight: 600;
+      display: none; text-align: center;
+      margin-top: 40px; font-size: 18px;
+      color: #777; font-weight: 600;
     }
     #imageModal {
-      display: none;
-      position: fixed;
-      z-index: 10000;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.9);
+      display: none; position: fixed; z-index: 10000;
+      inset: 0; background-color: rgba(0,0,0,0.9);
+      padding: 60px 20px 40px; text-align: center;
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 60px 20px 40px;
-      text-align: center;
     }
     #modalContent {
-      max-width: 90vw;
-      max-height: 80vh;
-      width: auto;
-      height: auto;
-      border-radius: 12px;
+      max-width: 90vw; max-height: 80vh;
+      object-fit: contain; border-radius: 12px;
       box-shadow: 0 0 25px #00ffe1;
-      user-select: none;
-      margin-bottom: 20px;
-      transition: transform 0.3s ease;
-      object-fit: contain;
+      transition: transform 0.3s;
     }
     #modalCaption {
-      color: #fff;
-      font-size: 18px;
-      max-width: 90%;
-      margin: 0 auto 10px auto;
+      color: #fff; font-size: 18px;
+      margin: 10px auto 0; max-width: 90%;
       user-select: text;
     }
+    body.light #modalCaption { color: #000; }
     #modalClose {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 40px;
-      font-weight: 700;
-      color: #fff;
-      cursor: pointer;
-      user-select: none;
-      transition: color 0.3s ease;
-      padding: 0 8px;
-      line-height: 1;
+      position: absolute; top: 20px; right: 30px;
+      font-size: 40px; color: #fff;
+      font-weight: 700; cursor: pointer;
+      transition: color 0.3s;
     }
-    #modalClose:hover,
-    #modalClose:focus {
-      color: #00ffe1;
-      outline: none;
-    }
+    #modalClose:hover { color: #00ffe1; }
     .floating-xiaohao {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      padding: 12px 28px;
-      border-radius: 24px;
-      font-weight: 700;
-      font-size: 16px;
+      position: fixed; bottom: 30px;
+      left: 50%; transform: translateX(-50%);
+      background-color: rgba(0,0,0,0.6); color: #fff;
+      padding: 12px 28px; border-radius: 24px;
+      font-weight: 700; font-size: 16px;
       z-index: 9999;
       animation: float 2s ease-in-out infinite;
-      user-select: none;
       box-shadow: 0 0 10px #00ffe1;
       text-shadow: 0 0 5px #00ffe1;
+      user-select: none;
+    }
+    body.light .floating-xiaohao {
+      background: rgba(255,255,255,0.6); color: #000;
+      text-shadow: none; box-shadow: none;
     }
     @keyframes float {
-      0%, 100% {
-        transform: translateX(-50%) translateY(0);
-      }
-      50% {
-        transform: translateX(-50%) translateY(-6px);
-      }
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-6px); }
     }
     @media (max-width: 768px) {
-      .image-item {
-        flex: 1 1 90%;
-        max-width: 90%;
-      }
-      .image-item img {
-        height: 150px;
-      }
-      #modalContent {
-        max-height: 50vh;
-      }
+      .image-item { flex: 1 1 90%; max-width: 90%; }
+      .image-item img { height: 150px; }
+      #modalContent { max-height: 50vh; }
     }
   </style>
 </head>
 <body>
+
   <a class="back-button" href="index.html" aria-label="回主頁">⮐ 回主頁</a>
+  <button id="themeSwitch">🌙</button>
+  <input type="search" id="searchInput" placeholder="搜尋圖片與描述" aria-label="搜尋圖片與描述" autocomplete="off" />
 
-  <input
-    type="search"
-    id="searchInput"
-    placeholder="輸入關鍵字搜尋..."
-    aria-label="搜尋圖片與描述"
-    autocomplete="off"
-  />
-
-  <main class="gallery" id="gallery" role="list">
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：七仔（十大槍擊要犯）更新時間：6/01 13:57">
-      <img src="IMG_4905.jpg" alt="七仔" />
-      <div class="caption">族長：七仔（十大槍擊要犯）更新時間：6/01 13:57</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：書值（PUA帝國）更新時間：5/31 15:09">
-      <img src="IMG_4877.jpg" alt="書值" />
-      <div class="caption">族長：書值（PUA帝國）更新時間：5/31 15:09</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：家族招生（水仙宮）更新時間：5/4 17:36">
-      <img src="IMG_4074.jpeg" alt="水仙宮" />
-      <div class="caption">族長：家族招生（水仙宮）更新時間：5/4 17:36</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：鱷勢力（lmclub）更新時間：6/4 20:50">
-      <img src="IMG_4969.jpeg" alt="鱷勢力" />
-      <div class="caption">族長：鱷勢力（lmclub）更新時間：6/4 20:50</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：蟲洞（刁蟲小姬）更新時間：6/5 00:33">
-      <img src="IMG_4973.jpg" alt="刁蟲小姬" />
-      <div class="caption">族長：蟲洞（刁蟲小姬）更新時間：6/5 00:33</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：恩椎（問心無愧）更新時間：6/8 00:33">
-      <img src="IMG_5027.jpg" alt="恩椎" />
-      <div class="caption">族長：恩椎（問心無愧）更新時間：6/8 00:33</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：森林系的野蠻布丁（夏日梧桐雨）更新時間：6/8 20:40">
-      <img src="IMG_5062.jpeg" alt="夏日梧桐雨" />
-      <div class="caption">族長：森林系的野蠻布丁（夏日梧桐雨）更新時間：6/8 20:40</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：東少（十二不赦）更新時間：6/11 06:50">
-      <img src="IMG_5196.jpeg" alt="夏日梧桐雨" />
-      <div class="caption">族長：東少（十二不赦）更新時間：6/11 06:50</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="（已升等）族長：奶茶（傾城之戀）更新時間：6/9 18:00">
-      <img src="line_oa_chat_250610_140100.jpeg" alt="夏日梧桐雨" />
-      <div class="caption">(已升等無法保障準確性）族長：奶茶（傾城之戀）更新時間：6/9 18:00</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：雷電（天守閣）更新時間：6/10 21:40">
-      <img src="line_oa_chat_250610_231511.jpeg"alt="夏日梧桐雨" />
-      <div class="caption">族長：雷電（天守閣）更新時間：6/10 21:40</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：香逼（棒棒糖總部子公司）更新時間：6/11 14:50">
-      <img src="IMG_5197.jpeg" alt="夏日梧桐雨" />
-      <div class="caption">族長：香逼（棒棒糖總部子公司）更新時間：6/11 14:50</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：瀟灑（瀟灑人生）更新時間：6/12 12:00">
-      <img src="line_oa_chat_250612_001734.jpeg" alt="夏日梧桐雨" />
-      <div class="caption">族長：瀟灑（瀟灑人生）更新時間：6/12 12:00</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：林以恩（縱觀全局）更新時間：（用戶提供時間與時間不符）">
-      <img src="line_oa_chat_250612_010442.jpeg" alt="夏日梧桐雨" />
-      <div class="caption">族長：林以恩（縱觀全局）更新時間：（用戶提供時間與時間不符）</div>
-    </article>
-    <article class="image-item" role="listitem" tabindex="0" data-caption="族長：三金（傾城）更新時間：未知">
-      <img src="IMG_5262.jpeg" alt="夏日梧桐雨" />
-      <div class="caption">族長：三金（傾城）更新時間：未知</div>
-    </article>
-  </main>
-
+  <main class="gallery" id="gallery" role="list"></main>
   <div id="noResults">沒有符合條件的結果。</div>
 
-  <div id="imageModal" role="dialog" aria-modal="true" aria-labelledby="modalCaption" tabindex="-1">
+  <div id="imageModal" role="dialog" aria-modal="true" tabindex="-1">
     <span id="modalClose" role="button" aria-label="關閉放大圖片">&times;</span>
     <img id="modalContent" src="" alt="" />
     <div id="modalCaption"></div>
@@ -280,66 +163,90 @@
   <div class="floating-xiaohao">萬惡之源</div>
 
   <script>
-    // 簡易圖片放大功能
-    const gallery = document.getElementById('gallery');
-    const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('modalContent');
-    const modalCaption = document.getElementById('modalCaption');
-    const modalClose = document.getElementById('modalClose');
+    const data = [
+      { src: "IMG_4905.jpg", alt: "七仔", caption: "族長：七仔（十大槍擊要犯）更新時間：6/01 13:57" },
+      { src: "IMG_4877.jpg", alt: "書值", caption: "族長：書值（PUA帝國）更新時間：5/31 15:09" },
+      { src: "IMG_4074.jpeg", alt: "水仙宮", caption: "族長：家族招生（水仙宮）更新時間：5/4 17:36" },
+      { src: "IMG_4969.jpeg", alt: "鱷勢力", caption: "族長：鱷勢力（lmclub）更新時間：6/4 20:50" },
+      { src: "IMG_4973.jpg", alt: "刁蟲小姬", caption: "族長：蟲洞（刁蟲小姬）更新時間：6/5 00:33" },
+      { src: "IMG_5027.jpg", alt: "恩椎", caption: "族長：恩椎（問心無愧）更新時間：6/8 00:33" },
+      { src: "IMG_5062.jpeg", alt: "夏日梧桐雨", caption: "族長：森林系的野蠻布丁（夏日梧桐雨）更新時間：6/8 20:40" },
+      { src: "IMG_5196.jpeg", alt: "東少", caption: "族長：東少（十二不赦）更新時間：6/11 06:50" },
+      { src: "line_oa_chat_250610_140100.jpeg", alt: "奶茶", caption: "(已升等無法保障準確性）族長：奶茶（傾城之戀）更新時間：6/9 18:00" },
+      { src: "line_oa_chat_250610_231511.jpeg", alt: "雷電", caption: "族長：雷電（天守閣）更新時間：6/10 21:40" },
+      { src: "IMG_5197.jpeg", alt: "香逼", caption: "族長：香逼（棒棒糖總部子公司）更新時間：6/11 14:50" },
+      { src: "line_oa_chat_250612_001734.jpeg", alt: "瀟灑", caption: "族長：瀟灑（瀟灑人生）更新時間：6/12 12:00" },
+      { src: "line_oa_chat_250612_010442.jpeg", alt: "林以恩", caption: "族長：林以恩（縱觀全局）更新時間：時間不符" },
+      { src: "IMG_5262.jpeg", alt: "三金", caption: "族長：三金（傾城）更新時間：未知" }
+    ];
 
-    gallery.addEventListener('click', e => {
-      const target = e.target.closest('.image-item');
-      if (!target) return;
-      const img = target.querySelector('img');
-      const caption = target.dataset.caption || '';
-      modalImg.src = img.src;
-      modalImg.alt = img.alt;
-      modalCaption.textContent = caption;
-      modal.style.display = 'block';
-      modal.focus();
-    });
-
-    modalClose.addEventListener('click', () => {
-      modal.style.display = 'none';
-      modalImg.src = '';
-      modalImg.alt = '';
-    });
-
-    modal.addEventListener('click', e => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-        modalImg.src = '';
-        modalImg.alt = '';
-      }
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && modal.style.display === 'block') {
-        modal.style.display = 'none';
-        modalImg.src = '';
-        modalImg.alt = '';
-      }
-    });
-
-    // 搜尋過濾功能
-    const searchInput = document.getElementById('searchInput');
-    const noResults = document.getElementById('noResults');
-
-    searchInput.addEventListener('input', () => {
-      const query = searchInput.value.trim().toLowerCase();
-      const items = document.querySelectorAll('.image-item');
-      let visibleCount = 0;
-      items.forEach(item => {
-        const caption = item.dataset.caption.toLowerCase();
-        if (caption.includes(query)) {
-          item.style.display = '';
-          visibleCount++;
-        } else {
-          item.style.display = 'none';
-        }
+    function renderGallery() {
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = '';
+      data.forEach(item => {
+        const art = document.createElement('article');
+        art.className = 'image-item'; art.tabIndex = 0;
+        art.dataset.caption = item.caption;
+        const img = document.createElement('img');
+        img.src = item.src; img.alt = item.alt; img.loading = 'lazy';
+        const div = document.createElement('div');
+        div.className = 'caption'; div.textContent = item.caption;
+        art.append(img, div);
+        gallery.appendChild(art);
       });
-      noResults.style.display = visibleCount === 0 ? 'block' : 'none';
-    });
+    }
+
+    function setupSearch() {
+      const input = document.getElementById('searchInput');
+      input.addEventListener('input', () => {
+        const q = input.value.trim().toLowerCase();
+        let visibleCount = 0;
+        document.querySelectorAll('.image-item').forEach(item => {
+          const ok = item.dataset.caption.toLowerCase().includes(q);
+          item.style.display = ok ? '' : 'none';
+          if (ok) visibleCount++;
+        });
+        document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+      });
+    }
+
+    function setupModal() {
+      const gallery = document.getElementById('gallery');
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalContent');
+      const modalCaption = document.getElementById('modalCaption');
+      const modalClose = document.getElementById('modalClose');
+
+      gallery.addEventListener('click', e => {
+        const target = e.target.closest('.image-item');
+        if (!target) return;
+        const img = target.querySelector('img');
+        modalImg.src = img.src;
+        modalImg.alt = img.alt;
+        modalCaption.textContent = target.dataset.caption;
+        modal.style.display = 'block';
+        modal.focus();
+      });
+
+      modalClose.addEventListener('click', () => modal.style.display = 'none');
+      modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.style.display === 'block') modal.style.display = 'none'; });
+    }
+
+    function setupThemeSwitcher() {
+      const btn = document.getElementById('themeSwitch');
+      btn.addEventListener('click', () => {
+        document.body.classList.toggle('light');
+        btn.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
+      });
+    }
+
+    // 初始化
+    renderGallery();
+    setupSearch();
+    setupModal();
+    setupThemeSwitcher();
   </script>
+
 </body>
 </html>
