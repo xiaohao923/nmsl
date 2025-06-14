@@ -6,119 +6,164 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="1920A1D0-7F36-41F0-BCA7-88605FC45C2B.png" />
   <style>
+    * { box-sizing: border-box; }
     body {
-      margin: 0;
-      background-color: black;
-      color: white;
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0; padding: 20px;
+      background-color: #0a0a0a; color: #e0e0e0;
+      -webkit-font-smoothing: antialiased;
     }
     body.light {
-      background-color: white;
-      color: black;
+      background-color: #f5f5f5; color: #333;
     }
-    header {
-      text-align: center;
-      padding: 1em;
+    .back-button {
+      position: fixed; top: 20px; right: 20px;
+      padding: 10px 22px; font-weight: 700; font-size: 14px;
+      color: #00ffe1; background: rgba(15,15,15,0.4);
+      border: 1.5px solid #00ffe1; border-radius: 12px;
+      text-decoration: none; z-index: 9999;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 15px rgba(0,255,225,0.3);
+      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+      user-select: none;
     }
-    #searchInput {
-      display: block;
-      margin: 1em auto;
-      padding: 0.5em;
-      width: 80%;
-      max-width: 400px;
-    }
-    .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .image-item {
-      margin: 10px;
-      cursor: pointer;
-      max-width: 300px;
-    }
-    .image-item img {
-      width: 100%;
-      height: auto;
-    }
-    .caption {
-      text-align: center;
-      margin-top: 0.5em;
+    body.light .back-button {
+      color: #007bff; background: rgba(255,255,255,0.8); border-color: #007bff;
+      box-shadow: none;
     }
     #themeSwitch {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      color: inherit;
-      font-size: 1.5em;
-      cursor: pointer;
+      position: fixed; top: 20px; left: 20px;
+      padding: 8px 12px; font-size: 14px;
+      border: none; border-radius: 8px;
+      cursor: pointer; z-index: 9999;
+      background: rgba(15,15,15,0.4); color: #00ffe1;
+    }
+    body.light #themeSwitch {
+      background: rgba(255,255,255,0.8); color: #007bff;
+    }
+    #searchInput {
+      display: block; margin: 80px auto 20px;
+      padding: 12px 16px; width: 80%; max-width: 400px;
+      border: none; border-radius: 8px;
+      font-size: 16px;
+      background: var(--input-bg, #1e1e1e);
+      color: var(--input-color, #fff);
+      box-shadow: 0 0 10px rgba(0,255,225,0.3);
+      transition: box-shadow 0.3s;
+    }
+    body.light #searchInput {
+      --input-bg: #fff; --input-color: #000;
+      box-shadow: none;
+    }
+    #searchInput:focus {
+      box-shadow: 0 0 18px #00ffe1; outline: none;
+    }
+    .gallery {
+      display: flex; flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1200px; margin: 0 auto; gap: 20px;
+    }
+    .image-item {
+      flex: 1 1 300px; max-width: 320px;
+      background-color: #111; border-radius: 10px;
+      overflow: hidden; cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,255,225,0.15);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex; flex-direction: column;
+    }
+    body.light .image-item { background: #fff; }
+    .image-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(0,255,225,0.4);
+    }
+    .image-item img {
+      width: 100%; height: 200px;
+      object-fit: contain;
+      border-bottom: 1px solid #00ffe1;
+      display: block; user-select: none;
+      background-color: #111;
+    }
+    .image-item .caption {
+      padding: 12px 16px; font-size: 14px;
+      color: #ccc; flex-grow: 1; user-select: text;
+    }
+    body.light .image-item .caption { color: #555; }
+    #noResults {
+      display: none; text-align: center;
+      margin-top: 40px; font-size: 18px;
+      color: #777; font-weight: 600;
     }
     #imageModal {
-      display: none;
-      position: fixed;
-      z-index: 999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.9);
+      display: none; position: fixed; z-index: 10000;
+      inset: 0; background-color: rgba(0,0,0,0.9);
+      padding: 60px 20px 40px; text-align: center;
+      overflow-y: auto;
     }
     #modalContent {
-      margin: 10% auto;
-      display: block;
-      max-width: 90%;
+      max-width: 90vw; max-height: 80vh;
+      object-fit: contain; border-radius: 12px;
+      box-shadow: 0 0 25px #00ffe1;
+      transition: transform 0.3s;
     }
     #modalCaption {
-      text-align: center;
-      color: #ccc;
-      padding: 10px;
+      color: #fff; font-size: 18px;
+      margin: 10px auto 0; max-width: 90%;
+      user-select: text;
     }
+    body.light #modalCaption { color: #000; }
     #modalClose {
-      position: absolute;
-      top: 15px;
-      right: 35px;
-      color: #fff;
-      font-size: 30px;
-      font-weight: bold;
-      cursor: pointer;
+      position: absolute; top: 20px; right: 30px;
+      font-size: 40px; color: #fff;
+      font-weight: 700; cursor: pointer;
+      transition: color 0.3s;
     }
-    .pagination {
-      text-align: center;
-      margin: 1em 0;
+    #modalClose:hover { color: #00ffe1; }
+    .floating-xiaohao {
+      position: fixed; bottom: 30px;
+      left: 50%; transform: translateX(-50%);
+      background-color: rgba(0,0,0,0.6); color: #fff;
+      padding: 12px 28px; border-radius: 24px;
+      font-weight: 700; font-size: 16px;
+      z-index: 9999;
+      animation: float 2s ease-in-out infinite;
+      box-shadow: 0 0 10px #00ffe1;
+      text-shadow: 0 0 5px #00ffe1;
+      user-select: none;
     }
-    .pagination button {
-      padding: 0.5em 1em;
-      margin: 0 0.5em;
-      font-size: 1em;
-      cursor: pointer;
+    body.light .floating-xiaohao {
+      background: rgba(255,255,255,0.6); color: #000;
+      text-shadow: none; box-shadow: none;
+    }
+    @keyframes float {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-6px); }
+    }
+    @media (max-width: 768px) {
+      .image-item { flex: 1 1 90%; max-width: 90%; }
+      .image-item img { height: 150px; }
+      #modalContent { max-height: 50vh; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>資金防護罩</h1>
-  </header>
 
+  <a class="back-button" href="index.html" aria-label="回主頁">⮐ 回主頁</a>
   <button id="themeSwitch">🌙</button>
+  <input type="search" id="searchInput" placeholder="搜尋圖片與描述" aria-label="搜尋圖片與描述" autocomplete="off" />
 
-  <input type="text" id="searchInput" placeholder="搜尋族長或家族關鍵字..." />
+  <main class="gallery" id="gallery" role="list"></main>
+  <div id="noResults">沒有符合條件的結果。</div>
 
-  <div class="gallery" id="gallery"></div>
+  <!-- 分頁按鈕容器 -->
+  <div id="pagination" style="text-align:center; margin:20px 0;"></div>
 
-  <div class="pagination">
-    <button id="prevPage">← 上一頁</button>
-    <span id="pageInfo">第 1 / 1 頁</span>
-    <button id="nextPage">下一頁 →</button>
-  </div>
-
-  <div id="imageModal">
-    <span id="modalClose">&times;</span>
-    <img id="modalContent" />
+  <div id="imageModal" role="dialog" aria-modal="true" tabindex="-1">
+    <span id="modalClose" role="button" aria-label="關閉放大圖片">&times;</span>
+    <img id="modalContent" src="" alt="" />
     <div id="modalCaption"></div>
   </div>
+
+  <div class="floating-xiaohao">萬惡之源</div>
 
   <script>
     const data = [
@@ -130,7 +175,7 @@
       { src: "IMG_5027.jpg", alt: "恩椎", caption: "族長：恩椎（問心無愧）更新時間：6/8 00:33" },
       { src: "IMG_5062.jpeg", alt: "夏日梧桐雨", caption: "族長：森林系的野蠻布丁（夏日梧桐雨）更新時間：6/8 20:40" },
       { src: "IMG_5196.jpeg", alt: "東少", caption: "族長：東少（十二不赦）更新時間：6/11 06:50" },
-      { src: "line_oa_chat_250610_140100.jpeg", alt: "奶茶", caption: "族長：奶茶（傾城之戀）更新時間：6/9 18:00" },
+      { src: "line_oa_chat_250610_140100.jpeg", alt: "奶茶", caption: "(已升等無法保障準確性）族長：奶茶（傾城之戀）更新時間：6/9 18:00" },
       { src: "line_oa_chat_250610_231511.jpeg", alt: "雷電", caption: "族長：雷電（天守閣）更新時間：6/10 21:40" },
       { src: "IMG_5197.jpeg", alt: "香逼", caption: "族長：香逼（棒棒糖總部子公司）更新時間：6/11 14:50" },
       { src: "line_oa_chat_250612_001734.jpeg", alt: "瀟灑", caption: "族長：瀟灑（瀟灑人生）更新時間：6/12 12:00" },
@@ -138,73 +183,111 @@
       { src: "IMG_5262.jpeg", alt: "三金", caption: "族長：三金（傾城）更新時間：未知" }
     ];
 
-    const gallery = document.getElementById("gallery");
-    const searchInput = document.getElementById("searchInput");
-    const modal = document.getElementById("imageModal");
-    const modalContent = document.getElementById("modalContent");
-    const modalCaption = document.getElementById("modalCaption");
-    const modalClose = document.getElementById("modalClose");
-    const themeSwitch = document.getElementById("themeSwitch");
-
-    let filtered = [...data];
+    const itemsPerPage = 5;
     let currentPage = 1;
-    const perPage = 5;
 
-    function render() {
-      gallery.innerHTML = "";
-      const start = (currentPage - 1) * perPage;
-      const pageItems = filtered.slice(start, start + perPage);
+    function renderGallery(filtered = data) {
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = '';
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const currentItems = filtered.slice(start, end);
 
-      pageItems.forEach((item) => {
-        const div = document.createElement("div");
-        div.className = "image-item";
-        div.innerHTML = `
-          <img src="${item.src}" alt="${item.alt}" />
-          <div class="caption">${item.caption}</div>
-        `;
-        div.addEventListener("click", () => {
-          modal.style.display = "block";
-          modalContent.src = item.src;
-          modalCaption.textContent = item.caption;
-        });
-        gallery.appendChild(div);
+      currentItems.forEach(item => {
+        const art = document.createElement('article');
+        art.className = 'image-item'; art.tabIndex = 0;
+        art.dataset.caption = item.caption;
+        const img = document.createElement('img');
+        img.src = item.src; img.alt = item.alt; img.loading = 'lazy';
+        const div = document.createElement('div');
+        div.className = 'caption'; div.textContent = item.caption;
+        art.append(img, div);
+        gallery.appendChild(art);
       });
 
-      const totalPages = Math.ceil(filtered.length / perPage);
-      document.getElementById("pageInfo").textContent = `第 ${currentPage} / ${totalPages} 頁`;
-      document.getElementById("prevPage").disabled = currentPage === 1;
-      document.getElementById("nextPage").disabled = currentPage === totalPages;
+      renderPagination(filtered.length);
     }
 
-    searchInput.addEventListener("input", () => {
-      const keyword = searchInput.value.toLowerCase();
-      filtered = data.filter((item) =>
-        item.caption.toLowerCase().includes(keyword)
-      );
-      currentPage = 1;
-      render();
-    });
+    function renderPagination(totalItems) {
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = '';
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-    modalClose.onclick = () => (modal.style.display = "none");
-    window.onclick = (e) => {
-      if (e.target === modal) modal.style.display = "none";
-    };
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.style.margin = '0 6px';
+        btn.style.padding = '6px 12px';
+        btn.style.border = '1px solid #00ffe1';
+        btn.style.background = (i === currentPage) ? '#00ffe1' : 'transparent';
+        btn.style.color = (i === currentPage) ? '#000' : '#00ffe1';
+        btn.style.cursor = 'pointer';
+        btn.style.borderRadius = '6px';
 
-    document.getElementById("prevPage").onclick = () => {
-      if (currentPage > 1) currentPage--;
-      render();
-    };
-    document.getElementById("nextPage").onclick = () => {
-      if (currentPage < Math.ceil(filtered.length / perPage)) currentPage++;
-      render();
-    };
+        if (document.body.classList.contains('light')) {
+          btn.style.color = (i === currentPage) ? '#fff' : '#007bff';
+          btn.style.background = (i === currentPage) ? '#007bff' : 'transparent';
+          btn.style.border = '1px solid #007bff';
+        }
 
-    themeSwitch.addEventListener("click", () => {
-      document.body.classList.toggle("light");
-      themeSwitch.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
-    });
+        btn.addEventListener('click', () => {
+          currentPage = i;
+          filterAndRender();
+        });
 
-    render();
+        pagination.appendChild(btn);
+      }
+    }
+
+    function setupSearch() {
+      document.getElementById('searchInput').addEventListener('input', () => {
+        currentPage = 1;
+        filterAndRender();
+      });
+    }
+
+    function filterAndRender() {
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      const filtered = data.filter(item => item.caption.toLowerCase().includes(q));
+      document.getElementById('noResults').style.display = filtered.length === 0 ? 'block' : 'none';
+      renderGallery(filtered);
+    }
+
+    function setupModal() {
+      const gallery = document.getElementById('gallery');
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalContent');
+      const modalCaption = document.getElementById('modalCaption');
+      const modalClose = document.getElementById('modalClose');
+
+      gallery.addEventListener('click', e => {
+        const target = e.target.closest('.image-item');
+        if (!target) return;
+        const img = target.querySelector('img');
+        modalImg.src = img.src; modalImg.alt = img.alt;
+        modalCaption.textContent = target.dataset.caption;
+        modal.style.display = 'block'; modal.focus();
+      });
+
+      modalClose.addEventListener('click', () => modal.style.display = 'none');
+      modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.style.display === 'block') modal.style.display = 'none'; });
+    }
+
+    function setupThemeSwitcher() {
+      const btn = document.getElementById('themeSwitch');
+      btn.addEventListener('click', () => {
+        document.body.classList.toggle('light');
+        btn.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
+        filterAndRender();
+      });
+    }
+
+    // 初始化
+    renderGallery();
+    setupSearch();
+    setupModal();
+    setupThemeSwitcher();
   </script>
 </body>
 </html>
