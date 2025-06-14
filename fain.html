@@ -6,138 +6,213 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="1920A1D0-7F36-41F0-BCA7-88605FC45C2B.png" />
   <style>
-    * { box-sizing: border-box; }
+    /* —— 顏色變數 —— */
+    :root {
+      --bg-dark: #0a0a0a;
+      --text-dark: #e0e0e0;
+      --accent-dark: #00ffe1;
+      --bg-light: #f5f5f5;
+      --text-light: #222;
+      --accent-light: #007bff;
+      --card-dark: #111;
+      --card-light: #fff;
+    }
+    /* —— 全局 —— */
+    *, *::before, *::after { box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0; padding: 20px;
-      background-color: #0a0a0a; color: #e0e0e0;
-      -webkit-font-smoothing: antialiased;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+      transition: background-color 0.3s, color 0.3s;
     }
     body.light {
-      background-color: #f5f5f5; color: #333;
+      background-color: var(--bg-light);
+      color: var(--text-light);
     }
+    /* 自訂捲軸 */
+    body::-webkit-scrollbar { width: 8px; }
+    body::-webkit-scrollbar-thumb {
+      background: var(--accent-dark); border-radius: 4px;
+      transition: background 0.3s;
+    }
+    body.light::-webkit-scrollbar-thumb { background: var(--accent-light); }
+
+    /* —— 回主頁按鈕 —— */
     .back-button {
       position: fixed; top: 20px; right: 20px;
       padding: 10px 22px; font-weight: 700; font-size: 14px;
-      color: #00ffe1; background: rgba(15,15,15,0.4);
-      border: 1.5px solid #00ffe1; border-radius: 12px;
+      color: var(--accent-dark); background: rgba(15,15,15,0.4);
+      border: 1.5px solid var(--accent-dark); border-radius: 12px;
       text-decoration: none; z-index: 9999;
       backdrop-filter: blur(6px);
       box-shadow: 0 0 15px rgba(0,255,225,0.3);
-      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
-      user-select: none;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.2s, color 0.3s, border-color 0.3s;
     }
     body.light .back-button {
-      color: #007bff; background: rgba(255,255,255,0.8); border-color: #007bff;
-      box-shadow: none;
+      color: var(--accent-light); background: rgba(255,255,255,0.8);
+      border-color: var(--accent-light);
+      box-shadow: 0 0 8px rgba(0,123,255,0.25);
     }
+    .back-button:hover { transform: scale(1.05); }
+
+    /* —— 主題切換按鈕 —— */
     #themeSwitch {
       position: fixed; top: 20px; left: 20px;
-      padding: 8px 12px; font-size: 14px;
-      border: none; border-radius: 8px;
+      width: 40px; height: 40px;
+      border: none; border-radius: 50%;
+      font-size: 20px; line-height: 1;
+      background: rgba(15,15,15,0.4); color: var(--accent-dark);
       cursor: pointer; z-index: 9999;
-      background: rgba(15,15,15,0.4); color: #00ffe1;
+      transition: background 0.3s, color 0.3s;
     }
     body.light #themeSwitch {
-      background: rgba(255,255,255,0.8); color: #007bff;
+      background: rgba(255,255,255,0.8); color: var(--accent-light);
     }
+    #themeSwitch:focus { outline: none; }
+
+    /* —— 搜尋框 —— */
     #searchInput {
       display: block; margin: 80px auto 20px;
       padding: 12px 16px; width: 80%; max-width: 400px;
-      border: none; border-radius: 8px;
-      font-size: 16px;
-      background: var(--input-bg, #1e1e1e);
-      color: var(--input-color, #fff);
+      border: none; border-radius: 8px; font-size: 16px;
+      background: #1e1e1e; color: #fff;
       box-shadow: 0 0 10px rgba(0,255,225,0.3);
-      transition: box-shadow 0.3s;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
     }
     body.light #searchInput {
-      --input-bg: #fff; --input-color: #000;
-      box-shadow: none;
+      background: #fff; color: #000;
+      box-shadow: 0 0 8px rgba(0,123,255,0.2);
     }
-    #searchInput:focus {
-      box-shadow: 0 0 18px #00ffe1; outline: none;
-    }
+    #searchInput:focus { box-shadow: 0 0 18px currentColor; outline: none; }
+
+    /* —— 畫廊卡片 —— */
     .gallery {
-      display: flex; flex-wrap: wrap;
-      justify-content: center;
+      display: flex; flex-wrap: wrap; justify-content: center;
       max-width: 1200px; margin: 0 auto; gap: 20px;
     }
     .image-item {
       flex: 1 1 300px; max-width: 320px;
-      background-color: #111; border-radius: 10px;
-      overflow: hidden; cursor: pointer;
+      background-color: var(--card-dark);
+      border-radius: 10px; overflow: hidden;
       box-shadow: 0 0 10px rgba(0,255,225,0.15);
       transition: transform 0.3s, box-shadow 0.3s;
       display: flex; flex-direction: column;
     }
-    body.light .image-item { background: #fff; }
+    body.light .image-item {
+      background-color: var(--card-light);
+      box-shadow: 0 0 8px rgba(0,123,255,0.1);
+    }
     .image-item:hover {
       transform: scale(1.05);
       box-shadow: 0 0 25px rgba(0,255,225,0.4);
     }
+    body.light .image-item:hover {
+      box-shadow: 0 0 20px rgba(0,123,255,0.3);
+    }
     .image-item img {
-      width: 100%; height: 200px;
-      object-fit: contain;
-      border-bottom: 1px solid #00ffe1;
-      display: block; user-select: none;
-      background-color: #111;
+      width: 100%; height: 200px; object-fit: contain;
+      border-bottom: 1px solid var(--accent-dark);
+      background-color: var(--card-dark);
+      transition: background-color 0.3s;
     }
-    .image-item .caption {
-      padding: 12px 16px; font-size: 14px;
-      color: #ccc; flex-grow: 1; user-select: text;
+    body.light .image-item img {
+      background-color: var(--card-light);
+      border-color: var(--accent-light);
     }
-    body.light .image-item .caption { color: #555; }
+    .caption {
+      padding: 12px 16px; font-size: 14px; flex-grow: 1;
+      color: #ccc; user-select: text;
+      transition: color 0.3s;
+    }
+    body.light .caption { color: #444; }
+
+    /* —— 無結果文字 —— */
     #noResults {
       display: none; text-align: center;
-      margin-top: 40px; font-size: 18px;
-      color: #777; font-weight: 600;
+      margin-top: 40px; font-size: 18px; font-weight: 600;
+      color: #777;
     }
+
+    /* —— 分頁樣式 —— */
+    .pagination {
+      display: flex; justify-content: center; margin: 30px 0;
+      user-select: none;
+    }
+    .page-item {
+      margin: 0 5px; padding: 6px 12px;
+      border-radius: 6px; cursor: pointer;
+      background: rgba(15,15,15,0.4);
+      color: var(--accent-dark);
+      transition: background 0.3s, color 0.3s;
+    }
+    body.light .page-item {
+      background: rgba(255,255,255,0.8);
+      color: var(--accent-light);
+    }
+    .page-item.active {
+      font-weight: 700;
+      background: var(--accent-dark);
+      color: #000;
+    }
+    body.light .page-item.active {
+      background: var(--accent-light);
+      color: #fff;
+    }
+
+    /* —— 模態視窗 —— */
     #imageModal {
-      display: none; position: fixed; z-index: 10000;
-      inset: 0; background-color: rgba(0,0,0,0.9);
-      padding: 60px 20px 40px; text-align: center;
-      overflow-y: auto;
+      display: none; position: fixed; inset: 0; z-index: 10000;
+      background-color: rgba(0,0,0,0.9); text-align: center;
+      padding: 60px 20px 40px; overflow-y: auto;
+      transition: background-color 0.3s;
+    }
+    body.light #imageModal {
+      background-color: rgba(255,255,255,0.9);
     }
     #modalContent {
       max-width: 90vw; max-height: 80vh;
       object-fit: contain; border-radius: 12px;
-      box-shadow: 0 0 25px #00ffe1;
-      transition: transform 0.3s;
+      box-shadow: 0 0 25px var(--accent-dark);
     }
     #modalCaption {
-      color: #fff; font-size: 18px;
-      margin: 10px auto 0; max-width: 90%;
-      user-select: text;
+      margin-top: 10px; font-size: 18px;
+      color: #fff; transition: color 0.3s;
     }
-    body.light #modalCaption { color: #000; }
+    body.light #modalCaption { color: #111; }
     #modalClose {
       position: absolute; top: 20px; right: 30px;
-      font-size: 40px; color: #fff;
-      font-weight: 700; cursor: pointer;
+      font-size: 40px; color: #fff; cursor: pointer;
       transition: color 0.3s;
     }
-    #modalClose:hover { color: #00ffe1; }
+    #modalClose:hover { color: var(--accent-dark); }
+    body.light #modalClose { color: #000; }
+
+    /* —— 底部浮動文字 —— */
     .floating-xiaohao {
-      position: fixed; bottom: 30px;
-      left: 50%; transform: translateX(-50%);
+      position: fixed; bottom: 30px; left: 50%;
+      transform: translateX(-50%);
       background-color: rgba(0,0,0,0.6); color: #fff;
       padding: 12px 28px; border-radius: 24px;
-      font-weight: 700; font-size: 16px;
-      z-index: 9999;
+      font-weight: 700; font-size: 16px; z-index: 9999;
+      box-shadow: 0 0 10px var(--accent-dark);
+      text-shadow: 0 0 5px var(--accent-dark);
       animation: float 2s ease-in-out infinite;
-      box-shadow: 0 0 10px #00ffe1;
-      text-shadow: 0 0 5px #00ffe1;
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
       user-select: none;
-    }
-    body.light .floating-xiaohao {
-      background: rgba(255,255,255,0.6); color: #000;
-      text-shadow: none; box-shadow: none;
     }
     @keyframes float {
       0%,100% { transform: translateX(-50%) translateY(0); }
       50% { transform: translateX(-50%) translateY(-6px); }
     }
+    body.light .floating-xiaohao {
+      background: rgba(255,255,255,0.6);
+      color: #111;
+      box-shadow: 0 0 6px rgba(0,123,255,0.2);
+      text-shadow: none;
+    }
+
+    /* —— 響應式 —— */
     @media (max-width: 768px) {
       .image-item { flex: 1 1 90%; max-width: 90%; }
       .image-item img { height: 150px; }
@@ -147,12 +222,13 @@
 </head>
 <body>
 
-  <a class="back-button" href="index.html" aria-label="回主頁">⮐ 回主頁</a>
-  <button id="themeSwitch">🌙</button>
-  <input type="search" id="searchInput" placeholder="搜尋圖片與描述" aria-label="搜尋圖片與描述" autocomplete="off" />
+  <a class="back-button" href="index.html">⮐ 回主頁</a>
+  <button id="themeSwitch" aria-label="切換主題">🌙</button>
+  <input type="search" id="searchInput" placeholder="搜尋圖片與描述" autocomplete="off" />
 
   <main class="gallery" id="gallery" role="list"></main>
   <div id="noResults">沒有符合條件的結果。</div>
+  <div class="pagination" id="pagination"></div>
 
   <div id="imageModal" role="dialog" aria-modal="true" tabindex="-1">
     <span id="modalClose" role="button" aria-label="關閉放大圖片">&times;</span>
@@ -163,6 +239,7 @@
   <div class="floating-xiaohao">萬惡之源</div>
 
   <script>
+    // —— 圖片資料 —— 
     const data = [
       { src: "IMG_4905.jpg", alt: "七仔", caption: "族長：七仔（十大槍擊要犯）更新時間：6/01 13:57" },
       { src: "IMG_4877.jpg", alt: "書值", caption: "族長：書值（PUA帝國）更新時間：5/31 15:09" },
@@ -180,10 +257,16 @@
       { src: "IMG_5262.jpeg", alt: "三金", caption: "族長：三金（傾城）更新時間：未知" }
     ];
 
-    function renderGallery() {
+    const ITEMS_PER_PAGE = 5;
+    let currentPage = 1;
+
+    // —— 渲染畫廊 & 處理分頁 —— 
+    function renderGallery(page = 1) {
+      const start = (page - 1) * ITEMS_PER_PAGE;
+      const slice = data.slice(start, start + ITEMS_PER_PAGE);
       const gallery = document.getElementById('gallery');
       gallery.innerHTML = '';
-      data.forEach(item => {
+      slice.forEach(item => {
         const art = document.createElement('article');
         art.className = 'image-item'; art.tabIndex = 0;
         art.dataset.caption = item.caption;
@@ -194,54 +277,93 @@
         art.append(img, div);
         gallery.appendChild(art);
       });
+      document.getElementById('noResults').style.display = slice.length === 0 ? 'block' : 'none';
+      renderPagination();
     }
 
+    function renderPagination() {
+      const pageCount = Math.ceil(data.length / ITEMS_PER_PAGE);
+      const container = document.getElementById('pagination');
+      container.innerHTML = '';
+      for (let i = 1; i <= pageCount; i++) {
+        const btn = document.createElement('div');
+        btn.className = 'page-item' + (i === currentPage ? ' active' : '');
+        btn.textContent = i;
+        btn.addEventListener('click', () => {
+          currentPage = i;
+          renderGallery(i);
+        });
+        container.appendChild(btn);
+      }
+    }
+
+    // —— 搜尋模組 —— 
     function setupSearch() {
       const input = document.getElementById('searchInput');
       input.addEventListener('input', () => {
         const q = input.value.trim().toLowerCase();
-        let visibleCount = 0;
-        document.querySelectorAll('.image-item').forEach(item => {
-          const ok = item.dataset.caption.toLowerCase().includes(q);
-          item.style.display = ok ? '' : 'none';
-          if (ok) visibleCount++;
-        });
-        document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+        if (q) {
+          const gallery = document.getElementById('gallery');
+          gallery.innerHTML = '';
+          let count = 0;
+          data.forEach(item => {
+            if (item.caption.toLowerCase().includes(q)) {
+              count++;
+              const art = document.createElement('article');
+              art.className = 'image-item'; art.tabIndex = 0;
+              art.dataset-caption = item.caption;
+              const img = document.createElement('img');
+              img.src = item.src; img.alt = item.alt; img.loading = 'lazy';
+              const div = document.createElement('div');
+              div.className = 'caption'; div.textContent = item.caption;
+              art.append(img, div);
+              gallery.appendChild(art);
+            }
+          });
+          document.getElementById('noResults').style.display = count === 0 ? 'block' : 'none';
+          document.getElementById('pagination').style.display = 'none';
+        } else {
+          document.getElementById('pagination').style.display = 'flex';
+          renderGallery(currentPage);
+        }
       });
     }
 
+    // —— 模態放大 —— 
     function setupModal() {
       const gallery = document.getElementById('gallery');
       const modal = document.getElementById('imageModal');
-      const modalImg = document.getElementById('modalContent');
-      const modalCaption = document.getElementById('modalCaption');
-      const modalClose = document.getElementById('modalClose');
-
+      const imgEl = document.getElementById('modalContent');
+      const capEl = document.getElementById('modalCaption');
+      const closeBtn = document.getElementById('modalClose');
       gallery.addEventListener('click', e => {
-        const target = e.target.closest('.image-item');
-        if (!target) return;
-        const img = target.querySelector('img');
-        modalImg.src = img.src;
-        modalImg.alt = img.alt;
-        modalCaption.textContent = target.dataset.caption;
+        const card = e.target.closest('.image-item');
+        if (!card) return;
+        imgEl.src = card.querySelector('img').src;
+        capEl.textContent = card.dataset.caption;
         modal.style.display = 'block';
-        modal.focus();
       });
-
-      modalClose.addEventListener('click', () => modal.style.display = 'none');
-      modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
-      document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.style.display === 'block') modal.style.display = 'none'; });
+      closeBtn.addEventListener('click', () => modal.style.display = 'none');
+      modal.addEventListener('click', e => e.target === modal && (modal.style.display = 'none'));
+      document.addEventListener('keydown', e => e.key === 'Escape' && (modal.style.display = 'none'));
     }
 
+    // —— 主題切換（含記憶） —— 
     function setupThemeSwitcher() {
       const btn = document.getElementById('themeSwitch');
+      if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light');
+        btn.textContent = '☀️';
+      }
       btn.addEventListener('click', () => {
         document.body.classList.toggle('light');
-        btn.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
+        const light = document.body.classList.contains('light');
+        btn.textContent = light ? '☀️' : '🌙';
+        localStorage.setItem('theme', light ? 'light' : 'dark');
       });
     }
 
-    // 初始化
+    // —— 初始化 —— 
     renderGallery();
     setupSearch();
     setupModal();
