@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="1920A1D0-7F36-41F0-BCA7-88605FC45C2B.png" />
   <style>
-    /* 你的原始CSS樣式 */
     body {
       background-color: #000;
       color: #00ffe1;
@@ -20,6 +19,36 @@
     }
     h1 {
       text-align: center;
+      margin-bottom: 10px;
+    }
+    #homeButton {
+      display: block;
+      margin: 0 auto 20px auto;
+      padding: 8px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 2px solid #00ffe1;
+      background: transparent;
+      color: #00ffe1;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      text-align: center;
+      width: max-content;
+      user-select: none;
+      text-decoration: none;
+    }
+    #homeButton:hover, #homeButton:focus {
+      background-color: #00ffe1;
+      color: #000;
+      outline: none;
+    }
+    body.light #homeButton {
+      border-color: #007bff;
+      color: #007bff;
+    }
+    body.light #homeButton:hover, body.light #homeButton:focus {
+      background-color: #007bff;
+      color: #fff;
     }
     #themeSwitch {
       cursor: pointer;
@@ -163,6 +192,7 @@
 </head>
 <body>
   <h1>資金防護罩</h1>
+  <a href="/" id="homeButton" role="button" aria-label="回到主頁">回到主頁</a>
   <div id="themeSwitch" title="切換明暗模式">🌙</div>
   <input type="text" id="searchInput" placeholder="搜尋關鍵字..." aria-label="搜尋圖片描述" />
   <div id="gallery" role="list"></div>
@@ -229,7 +259,7 @@
         img.alt = item.alt;
         img.loading = 'lazy';
         img.onerror = () => {
-          img.src = 'images/placeholder.png'; // 請自行準備此預設圖
+          img.src = 'images/placeholder.png';
           img.alt = '圖片載入錯誤';
         };
 
